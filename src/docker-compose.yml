@@ -1,0 +1,51 @@
+version: '3.1'
+services:
+  db:
+    build: TwitterDb/
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+  twitter_stream:
+    restart: always
+    build:
+        context: ./
+        dockerfile: Dockerfile.TwitterStream
+    env_file:
+        - .env
+
+  twitter_update:
+    restart: always
+    build:
+        context: ./
+        dockerfile: Dockerfile.TwitterUpdate
+    env_file:
+        - .env
+   
+  elasticsearch:
+    image: elasticsearch:6.4.1
+
+  logstash:
+    build: TwitterLogstash/
+    command: /bin/sh -c "dockerize -wait http://elasticsearch:9200/ && logstash -f /logstash.conf"
+    restart: on-failure
+    depends_on: 
+      - elasticsearch
+
+  kibana:
+    image: kibana:6.4.1
+    depends_on: 
+      - elasticsearch
+      
+  auth:
+    image: beevelop/nginx-basic-auth
+    depends_on:
+      - kibana
+    environment:
+      HTPASSWD: acolono:$$apr1$$HvImUttT$$NBBD.i0rZDDRhsqkmCcLN.
+      FORWARD_PORT: "5601"
+      FORWARD_HOST: "kibana"
+    ports:
+      - 8789:80
+
+volumes:
+  dbdata:

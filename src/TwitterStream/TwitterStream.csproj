@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <StartupObject>TwitterStream.TwitterStreamMain</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="morelinq" Version="2.10.0" />
+    <PackageReference Include="TweetinviAPI" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lib\Lib.csproj" />
+    <ProjectReference Include="..\TwitterDb\TwitterDb.csproj" />
+  </ItemGroup>
+
+</Project>
