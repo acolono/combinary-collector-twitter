@@ -1,0 +1,11 @@
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
+
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+steps:
+- script: |
+    cd src/
+    touch .env
+    docker-compose build --pull
+  displayName: 'docker-compose build'

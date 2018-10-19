@@ -1,0 +1,1 @@
+[![Build Status](https://dev.azure.com/volatile-void/pipes/_apis/build/status/acolono.combinary-collector-twitter)](https://dev.azure.com/volatile-void/pipes/_build/latest?definitionId=5)
