@@ -53,7 +53,7 @@ namespace TwitterUpdate
                     DateTime now;
                     try
                     {
-                        var rl = tokens.Help.RateLimitStatusAsync().AwaitAndGetResult();
+                        var rl = tokens.Application.RateLimitStatusAsync().AwaitAndGetResult();
                         Console.WriteLine($"RateLimit Remaining:{rl.RateLimit.Remaining}, block:{blockCount}/{list.Count}");
                         if (rl.RateLimit.Remaining < 5)
                         {
