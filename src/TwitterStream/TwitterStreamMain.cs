@@ -3,6 +3,7 @@ using System.Linq;
 using Ex = Lib.Exceptions;
 using Lib.Config;
 using Tweetinvi;
+using Tweetinvi.Streams.Model;
 
 namespace TwitterStream
 {
@@ -29,7 +30,7 @@ namespace TwitterStream
             stream.DisconnectMessageReceived += (o, args) => Console.WriteLine($"DisconnectMessageReceived code:{args.DisconnectMessage.Code} reason:{args.DisconnectMessage.Reason} name:{args.DisconnectMessage.StreamName}");
             stream.LimitReached += (o, args) => Console.WriteLine($"LimitReached skipped:{args.NumberOfTweetsNotReceived}");
             stream.WarningFallingBehindDetected += (o, args) => Console.WriteLine($"WarningFallingBehindDetected code:{args.WarningMessage.Code} percentFull:{args.WarningMessage.PercentFull} message:{args.WarningMessage.Message}");
-            stream.TweetDeleted += (o, args) => Ex.Log(() => handler.Delete(args.TweetDeletedInfo));
+            stream.TweetDeleted += (o, args) => Ex.Log(() => handler.Delete(args));
             stream.KeepAliveReceived += (o, args) => Console.WriteLine("KeepAlive");
 
             //stream.StartStream();

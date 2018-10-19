@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MoreLinq;
+using Tweetinvi.Events;
+using Tweetinvi.Streams.Model;
 using TwitterDb;
 using TwModels = Tweetinvi.Models;
 using TwEvents = Tweetinvi.Streaming.Events;
@@ -12,10 +14,10 @@ namespace TwitterStream
     public interface IHandler<in TAdd, in TDelete>
     {
         void Add(TAdd data);
-        void Delete(TDelete data);
+        void Delete(TweetDeletedEventArgs data);
     }
 
-    public interface ITweetHandler : IHandler<TwModels.ITweet, TwEvents.ITweetDeletedInfo> { }
+    public interface ITweetHandler : IHandler<TwModels.ITweet, TweetDeletedEventArgs> { }
 
     public class TweetHandler : ITweetHandler {
         public void Add(TwModels.ITweet inTweet)
@@ -72,11 +74,11 @@ namespace TwitterStream
             }
         }
 
-        public void Delete(TwEvents.ITweetDeletedInfo data)
+        public void Delete(TweetDeletedEventArgs data)
         {
             using (var db = new TwitterDbContext())
             {
-                var tweet = db.Tweet.SingleOrDefault(t => t.Id == data.Id);
+                var tweet = db.Tweet.SingleOrDefault(t => t.Id == data.TweetId);
                 if (tweet?.UserId == data.UserId)
                 {
                     tweet.Deleted = true;
