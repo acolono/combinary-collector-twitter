@@ -15,7 +15,7 @@ namespace TwitterDb
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING") ?? @"Host=192.168.93.3;Database=postgres;Username=postgres;Search Path=db,public");
+                optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING") ?? @"Host=localhost;Database=postgres;Username=postgres;Search Path=db,public");
             }
         }
 

@@ -4,9 +4,25 @@ services:
     build: TwitterDb/
     volumes:
       - dbdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  twitter_api:
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on: 
+      - db
+    build:
+        context: ./
+        dockerfile: Dockerfile.TwitterApi
+    env_file:
+        - .env
 
   twitter_stream:
     restart: always
+    depends_on: 
+      - db
     build:
         context: ./
         dockerfile: Dockerfile.TwitterStream
@@ -15,6 +31,8 @@ services:
 
   twitter_update:
     restart: always
+    depends_on: 
+      - db
     build:
         context: ./
         dockerfile: Dockerfile.TwitterUpdate
