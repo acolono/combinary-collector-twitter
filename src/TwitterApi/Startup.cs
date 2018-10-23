@@ -24,7 +24,7 @@ namespace TwitterApi {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Twitter Collector API", Version = "v1" });
+                c.SwaggerDoc("swagger", new Info { Title = "Twitter Collector API", Version = "v1" });
             });
         }
 
@@ -34,8 +34,8 @@ namespace TwitterApi {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Twitter Collector API"); });
+            app.UseSwagger(c => { c.RouteTemplate="{documentName}.json"; });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger.json", "Twitter Collector API"); });
             app.UseMvc();
         }
     }

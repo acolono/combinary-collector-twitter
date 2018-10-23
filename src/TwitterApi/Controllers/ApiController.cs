@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace TwitterApi.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase {
+    public class ApiController : ControllerBase {
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get() {
