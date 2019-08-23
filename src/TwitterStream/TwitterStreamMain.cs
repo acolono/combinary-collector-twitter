@@ -34,7 +34,7 @@ namespace TwitterStream
             stream.KeepAliveReceived += (o, args) => Console.WriteLine("KeepAlive");
 
             //stream.StartStream();
-            stream.StartStreamMatchingAllConditions();
+            stream.StartStreamMatchingAllConditionsAsync().GetAwaiter().GetResult();
 
             Console.WriteLine("stream was stopped");
         }
