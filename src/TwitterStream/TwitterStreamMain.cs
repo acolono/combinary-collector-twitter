@@ -34,7 +34,10 @@ namespace TwitterStream
                 }
             });
 
-            stream.MatchingTweetReceived += (o, args) => Ex.Log(() => handler.Add(args.Tweet));
+            stream.MatchingTweetReceived += (o, args) => Ex.Log(() => {
+                if(config.Verbose) Console.WriteLine($"Tweet: {args.Tweet.CreatedBy?.ScreenName}> {args.Tweet.Text}");
+                handler.Add(args.Tweet);
+            });
 
             stream.DisconnectMessageReceived += (o, args) => Console.WriteLine($"DisconnectMessageReceived code:{args.DisconnectMessage.Code} reason:{args.DisconnectMessage.Reason} name:{args.DisconnectMessage.StreamName}");
             stream.LimitReached += (o, args) => Console.WriteLine($"LimitReached skipped:{args.NumberOfTweetsNotReceived}");
