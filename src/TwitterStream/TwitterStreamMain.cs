@@ -23,9 +23,15 @@ namespace TwitterStream
 
             var stream = Stream.CreateFilteredStream(credentials);
 
-            config.Track?.Split(",").ToList().ForEach(t => stream.AddTrack(t));
+            config.Track?.Split(",").ToList().ForEach(t => {
+                stream.AddTrack(t);
+                Console.WriteLine($"Tracking: {t}");
+            });
             config.Follow?.Split(",").ToList().ForEach(f => {
-                if(long.TryParse(f, out var userId)) stream.AddFollow(userId);
+                if (long.TryParse(f, out var userId)) {
+                    stream.AddFollow(userId);
+                    Console.WriteLine($"Following: {userId}");
+                }
             });
 
             stream.MatchingTweetReceived += (o, args) => Ex.Log(() => handler.Add(args.Tweet));
