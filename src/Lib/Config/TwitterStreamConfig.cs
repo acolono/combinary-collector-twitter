@@ -15,6 +15,7 @@ namespace Lib.Config
     public interface ITwitterStreamConfig : ITwitterConfig
     {
         string Track { get; set; }
+        string Follow { get; set; }
     }
 
     public class TwitterStreamConfig : ITwitterStreamConfig
@@ -24,6 +25,7 @@ namespace Lib.Config
         public string AccessToken { get; set; }
         public string AccessTokenSecret { get; set; }
         public string Track { get; set; }
+        public string Follow { get; set; }
 
         private static string GetOrThrow(string prefix, string name) => GetOrThrow(prefix + name);
         private static string GetOrThrow(string name)
@@ -40,7 +42,8 @@ namespace Lib.Config
             ConsumerSecret = GetOrThrow(prefix, "CONSUMER_SECRET");
             AccessToken = GetOrThrow(prefix, "ACCESS_TOKEN");
             AccessTokenSecret = GetOrThrow(prefix, "ACCESS_TOKEN_SECRET");
-            Track = GetOrThrow(prefix, "TRACK");
+            Track = Environment.GetEnvironmentVariable(prefix + "TRACK");
+            Follow = Environment.GetEnvironmentVariable(prefix + "FOLLOW");
         }
     }
 }
