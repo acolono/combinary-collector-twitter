@@ -3,7 +3,8 @@ using System.Linq;
 using Ex = Lib.Exceptions;
 using Lib.Config;
 using Tweetinvi;
-using Tweetinvi.Streams.Model;
+using Tweetinvi.Models;
+using Tweetinvi.Parameters;
 
 namespace TwitterStream
 {
@@ -19,7 +20,8 @@ namespace TwitterStream
             Console.WriteLine("Start");
             var config = new TwitterStreamConfig();
             var credentials = Auth.SetUserCredentials(config.ConsumerKey, config.ConsumerSecret, config.AccessToken, config.AccessTokenSecret);
-            var handler = new TweetHandler();
+            var handler = new TweetHandler(config.Verbose);
+            RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackAndAwait;
 
             var stream = Stream.CreateFilteredStream(credentials);
 
@@ -31,11 +33,11 @@ namespace TwitterStream
                 if (long.TryParse(f, out var userId)) {
                     stream.AddFollow(userId);
                     Console.WriteLine($"Following: {userId}");
+                    GetUserTimeline(userId, handler.Add);
                 }
             });
 
             stream.MatchingTweetReceived += (o, args) => Ex.Log(() => {
-                if(config.Verbose) Console.WriteLine($"Tweet: {args.Tweet.CreatedBy?.ScreenName}> {args.Tweet.Text}");
                 handler.Add(args.Tweet);
             });
 
@@ -48,6 +50,22 @@ namespace TwitterStream
             stream.StartStreamMatchingAllConditionsAsync().GetAwaiter().GetResult();
 
             Console.WriteLine("stream was stopped");
+        }
+
+        private static void GetUserTimeline(long userId, Action<ITweet> tweetHandler) {
+            var pars = new UserTimelineParameters();
+            while (true) {
+                var tweets = Timeline.GetUserTimeline(new UserIdentifier(userId), pars)?.ToList();
+                if(tweets == null || !tweets.Any()) break;
+                foreach (var tweet in tweets) {
+                    if (tweet.CreatedBy.Id == userId) {
+                        tweetHandler(tweet);
+                    }
+                }
+                // https://developer.twitter.com/en/docs/tweets/timelines/guides/working-with-timelines
+                // Subtract 1 from the lowest Tweet ID returned from the previous request and use this for the value of max_id
+                pars.MaxId = tweets.Min(t => t.Id) - 1;
+            }
         }
     }
 }

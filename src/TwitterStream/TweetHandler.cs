@@ -20,6 +20,12 @@ namespace TwitterStream
     public interface ITweetHandler : IHandler<TwModels.ITweet, TweetDeletedEventArgs> { }
 
     public class TweetHandler : ITweetHandler {
+        private readonly bool _verbose;
+        public TweetHandler(bool verbose = false) {
+            _verbose = verbose;
+        }
+
+
         public void Add(TwModels.ITweet inTweet)
         {
             var now = DateTime.Now;
@@ -47,7 +53,10 @@ namespace TwitterStream
                     foreach (var tweet in tweets)
                     {
                         var exists = db.Tweet.Any(t => t.Id == tweet.Id);
-                        if (!exists) db.Tweet.Add(tweet);
+                        if (!exists) {
+                            if (_verbose) Console.WriteLine($"{tweet.UserId}> {tweet.Text}");
+                            db.Tweet.Add(tweet);
+                        }
                     }
                 }
 
