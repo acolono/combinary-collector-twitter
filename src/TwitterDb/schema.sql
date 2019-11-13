@@ -15,6 +15,7 @@ CREATE TABLE tweet (
   id BIGINT PRIMARY KEY NOT NULL,
   user_id BIGINT NOT NULL REFERENCES "user"(id),
   text TEXT not NULL,
+  media_photo TEXT,
   hashtags TEXT[] not null,
   country TEXT,
   country_code TEXT,

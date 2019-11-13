@@ -133,6 +133,7 @@ namespace TwitterStream
         {
             to.Id = inTweet.Id;
             to.Text = inTweet.FullText.ToNullIfEmpty() ?? inTweet.Text;
+            to.MediaPhoto = inTweet.Media?.FirstOrDefault(m => m.MediaType == "photo")?.MediaURLHttps.ToNullIfEmpty();
             to.Hashtags = inTweet.Hashtags?.Select(t => t.Text).ToArray();
             to.Lat = (decimal?) inTweet.Coordinates?.Latitude;
             to.Lon = (decimal?) inTweet.Coordinates?.Longitude;

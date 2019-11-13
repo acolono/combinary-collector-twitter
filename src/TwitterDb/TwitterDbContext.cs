@@ -97,6 +97,8 @@ namespace TwitterDb
                     .HasColumnName("lon")
                     .HasColumnType("numeric(9, 6)");
 
+                entity.Property(e => e.MediaPhoto).HasColumnName("media_photo");
+
                 entity.Property(e => e.Place).HasColumnName("place");
 
                 entity.Property(e => e.QuotedTweetId).HasColumnName("quoted_tweet_id");

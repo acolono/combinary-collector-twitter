@@ -14,6 +14,7 @@ namespace TwitterDb
         public long Id { get; set; }
         public long UserId { get; set; }
         public string Text { get; set; }
+        public string MediaPhoto { get; set; }
         public string[] Hashtags { get; set; }
         public string Country { get; set; }
         public string CountryCode { get; set; }
